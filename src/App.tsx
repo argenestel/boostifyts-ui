@@ -4,7 +4,7 @@ import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Layout, Typography, Button, message, Modal } from "antd";
-import { Content } from "antd/es/layout/layout";
+// import { Content } from "antd/es/layout/layout";
 import BoostifySDK from "./components/BoostifySDK/boostifysdk";
 
 const { Header } = Layout;
@@ -14,7 +14,7 @@ const { Title } = Typography;
 function App() {
   const aptosConfig = new AptosConfig({ network: Network.RANDOMNET, faucet: "https://faucet.random.aptoslabs.com" });
   const aptos = new Aptos(aptosConfig); // default to devnet
-  const { account, connected, signAndSubmitTransaction } = useWallet();
+  const { signAndSubmitTransaction } = useWallet();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleSignTransaction = async () => {
@@ -45,35 +45,35 @@ function App() {
       message.error("Failed to connect wallet.");
     }
   };
-  const handleDeploy = async () => {
-    if (!connected || !account) {
-      message.error("Please connect your wallet first.");
-      return;
-    }
+  // const handleDeploy = async () => {
+  //   if (!connected || !account) {
+  //     message.error("Please connect your wallet first.");
+  //     return;
+  //   }
 
-    const accountAddress = account.address;
-    const check = await aptos.account.getAccountAPTAmount({ accountAddress });
-    console.log(check);
+  //   const accountAddress = account.address;
+  //   const check = await aptos.account.getAccountAPTAmount({ accountAddress });
+  //   console.log(check);
 
-    const onSignAndSubmitTransaction = async () => {
-      try {
-        const response = await signAndSubmitTransaction({
-          type_arguments: [],
-          function: "0x6e696592f0d65b63accb62b34881e785fe2e2a5bc8c60204d98623f26384e99b::RandomnessInt::generate_random_u64",
-          type: "entry_function_payload",
-          arguments: [],
-        });
-        console.log(response);
-        await aptos.waitForTransaction({ transactionHash: response.hash });
-        message.success("Random module Called successfully!");
-      } catch (error) {
-        console.error(error);
-        message.error("Failed to deploy move module.");
-      }
-    };
+  //   const onSignAndSubmitTransaction = async () => {
+  //     try {
+  //       const response = await signAndSubmitTransaction({
+  //         type_arguments: [],
+  //         function: "0x6e696592f0d65b63accb62b34881e785fe2e2a5bc8c60204d98623f26384e99b::RandomnessInt::generate_random_u64",
+  //         type: "entry_function_payload",
+  //         arguments: [],
+  //       });
+  //       console.log(response);
+  //       await aptos.waitForTransaction({ transactionHash: response.hash });
+  //       message.success("Random module Called successfully!");
+  //     } catch (error) {
+  //       console.error(error);
+  //       message.error("Failed to deploy move module.");
+  //     }
+  //   };
 
-    await onSignAndSubmitTransaction();
-  };
+  //   await onSignAndSubmitTransaction();
+  // };
 
   return (
     <Layout>
@@ -83,8 +83,8 @@ function App() {
         </Title>
         <WalletSelector />
       </Header>
-      <Content style={{ padding: "24px" }}>
-        <Title level={2}>Random Move Module</Title>
+      {/* <Content style={{ padding: "24px" }}>
+        <Title level={2}>Random Move Module</Title> */}
         {/* <TextArea
           rows={8}
           value={moduleCode}
@@ -92,13 +92,13 @@ function App() {
           placeholder="Enter your move module code here"
           style={{ marginBottom: "16px" }}
         /> */}
-        <Button type="primary" style={ { marginBottom: "16px", marginRight: "16px" } } onClick={handleDeploy}>
+        {/* <Button type="primary" style={ { marginBottom: "16px", marginRight: "16px" } } onClick={handleDeploy}>
           Call Random
         </Button>
         <Button type="primary" onClick={() => setIsModalVisible(true)}>
           Add
         </Button>
-      </Content>
+      </Content> */}
         <BoostifySDK />
       <Modal
         title="Sign Transaction"
